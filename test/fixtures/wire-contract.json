@@ -1,0 +1,49 @@
+{
+  "_comment": [
+    "Frozen wire contract. Consumers depend on this exactly as written, so treat",
+    "any change here as a breaking API change - including key order, which is",
+    "part of the contract even though most JSON parsers ignore it.",
+    "",
+    "This pins structure, not data. Colonia lists and city names change when the",
+    "catalogue is refreshed; the shape never does."
+  ],
+  "request": {
+    "path": "/api/codigos-postales/{cp}",
+    "method": "GET",
+    "pathParam": {
+      "name": "cp",
+      "format": "^\\d{5}$"
+    },
+    "query": [],
+    "body": null,
+    "headers": {
+      "authorization": "Bearer {token} - optional, enforced only when SEPOMEX_API_TOKEN is set"
+    }
+  },
+  "response": {
+    "200": {
+      "keyOrder": ["codigo_postal", "estado", "municipio", "ciudad", "zona", "colonias"],
+      "types": {
+        "codigo_postal": "string",
+        "estado": "string",
+        "municipio": "string",
+        "ciudad": "string|null",
+        "zona": "string",
+        "colonias": "array"
+      },
+      "coloniaKeyOrder": ["nombre", "tipo"],
+      "coloniaTypes": {
+        "nombre": "string",
+        "tipo": "string"
+      },
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      }
+    },
+    "400": { "body": { "error": "invalid_postal_code" } },
+    "401": { "body": { "error": "unauthorized" } },
+    "404": { "body": { "error": "not_found" } },
+    "405": { "body": { "error": "method_not_allowed" }, "headers": { "allow": "GET, HEAD" } },
+    "500": { "body": { "error": "lookup_unavailable" } }
+  }
+}
