@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/**/*.js": {
+      "includeFiles": "data/**",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  },
+  "regions": ["iad1"],
+  "trailingSlash": false,
+  "cleanUrls": false,
+  "redirects": []
+}

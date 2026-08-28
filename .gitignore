@@ -1,0 +1,4 @@
+node_modules/
+.vercel/
+data/sepomex-raw.zip
+.DS_Store

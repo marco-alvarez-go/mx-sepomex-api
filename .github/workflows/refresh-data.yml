@@ -1,0 +1,46 @@
+name: Refresh SEPOMEX data
+
+# SEPOMEX republishes the catalogue roughly monthly. This rebuilds the shards
+# and commits them; if the Vercel GitHub integration is connected, the commit
+# deploys on its own.
+on:
+  schedule:
+    - cron: '0 6 5 * *' # 06:00 UTC on the 5th of each month
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The build script fails on a mis-encoded, truncated, or otherwise
+      # suspicious download, so a bad month stops here instead of shipping.
+      - name: Rebuild the postal code shards
+        run: node scripts/build-data.mjs
+
+      - name: Check the contract still holds
+        run: node --test test/contract.test.js
+
+      - name: Commit if the data changed
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No change in the SEPOMEX catalogue this month."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "chore(data): refresh SEPOMEX postal code catalogue"
+          git push

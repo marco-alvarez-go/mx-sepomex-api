@@ -1,0 +1,15 @@
+{
+  "name": "mx-sepomex-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Postal code lookup API for Mexico, served from the official SEPOMEX catalogue.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:data": "node scripts/build-data.mjs",
+    "test": "node --test test/",
+    "verify": "node scripts/verify-deployment.mjs"
+  }
+}
