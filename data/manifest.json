@@ -1,8 +1,8 @@
 {
-  "builtAt": "2026-08-28T16:07:25.339Z",
+  "builtAt": "2026-09-05T09:35:58.341Z",
   "source": "SEPOMEX / Correos de Mexico national postal code catalogue",
-  "rows": 159164,
+  "rows": 159201,
   "postalCodes": 31875,
   "shards": 96,
-  "bytes": 11806412
+  "bytes": 11808104
 }
